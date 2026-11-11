@@ -9,6 +9,13 @@
   --warn: #8a4b12;
   --line: #d5cbb8;
   --muted: #5c6570;
+  /* Landing page (Design A, green option 1): forest, ivory and gold. */
+  --forest: #0f3d2e;
+  --forest-line: #3e6b5a;
+  --ivory: #f5f1e6;
+  --sage: #c9d6cf;
+  --gold: #d4af37;
+  --gold-ink: #1f2a20;
 }
 
 @theme inline {
@@ -20,6 +27,12 @@
   --color-warn: var(--warn);
   --color-line: var(--line);
   --color-muted: var(--muted);
+  --color-forest: var(--forest);
+  --color-forest-line: var(--forest-line);
+  --color-ivory: var(--ivory);
+  --color-sage: var(--sage);
+  --color-gold: var(--gold);
+  --color-gold-ink: var(--gold-ink);
   --font-sans: var(--font-source-sans);
   --font-display: var(--font-fraunces);
 }
@@ -34,4 +47,44 @@ body {
 
 * {
   box-sizing: border-box;
+}
+
+/* Landing and registration pages: the whole page turns forest green, header included. */
+body:has(.landing-green) {
+  background: var(--forest);
+  color: var(--ivory);
+}
+body:has(.landing-green) header {
+  border-color: var(--forest-line);
+}
+body:has(.landing-green) header a {
+  color: var(--ivory);
+}
+body:has(.landing-green) header nav a {
+  color: var(--sage);
+}
+body:has(.landing-green) header nav a:hover {
+  color: var(--gold);
+}
+
+/* The Register button invites a tap: a gold ring pulses out while the button gently breathes. */
+@keyframes register-ring {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.65); }
+  70% { box-shadow: 0 0 0 18px rgba(212, 175, 55, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+}
+@keyframes register-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.register-pulse {
+  animation: register-ring 2s ease-out infinite, register-breathe 2s ease-in-out infinite;
+}
+.register-pulse:hover,
+.register-pulse:focus-visible {
+  animation-play-state: paused;
+}
+/* People who turn on "reduce motion" get a still (but still gold and prominent) button. */
+@media (prefers-reduced-motion: reduce) {
+  .register-pulse { animation: none; }
 }

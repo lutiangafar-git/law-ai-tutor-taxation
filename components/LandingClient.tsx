@@ -69,28 +69,28 @@ export function LandingClient() {
   }
 
   const card =
-    "w-full rounded-lg border border-line bg-white/80 px-4 py-4 text-left transition hover:border-accent hover:bg-accent-soft/40";
+    "w-full rounded-lg border-2 border-transparent bg-ivory px-4 py-4 text-left text-ink transition hover:border-gold hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold";
   const back = (to: Step) => (
-    <button type="button" onClick={() => setStep(to)} className="text-sm text-muted underline">
+    <button type="button" onClick={() => setStep(to)} className="text-sm text-sage underline hover:text-gold">
       ← Back
     </button>
   );
 
   if (step === "notice" && group) {
     return (
-      <section className="space-y-6">
-        <h1 className="font-display text-3xl text-ink">Before you start</h1>
-        <p className="rounded-lg border border-line bg-white/70 p-4 text-base leading-relaxed">
+      <section className="landing-green space-y-6">
+        <h1 className="font-display text-3xl text-ivory">Before you start</h1>
+        <p className="rounded-lg bg-ivory p-4 text-base leading-relaxed text-ink">
           {getUsageNotice(group)}
         </p>
-        <p className="text-sm text-muted">
+        <p className="text-sm text-sage">
           Never use this during exams, quizzes, proctored mock bars, or the bar exam itself. School and
           review-center rules come first.
         </p>
         <button
           type="button"
           onClick={continueAfterNotice}
-          className="w-full rounded-md bg-accent px-4 py-3 text-base font-medium text-white sm:w-auto"
+          className="w-full rounded-full bg-gold px-6 py-3 text-base font-medium text-gold-ink transition hover:brightness-105 sm:w-auto"
         >
           I understand — go to my drills
         </button>
@@ -100,11 +100,11 @@ export function LandingClient() {
 
   if (step === "category") {
     return (
-      <section className="space-y-6">
+      <section className="landing-green space-y-6">
         {back("start")}
         <div>
-          <p className="text-sm font-medium uppercase tracking-wide text-accent">Register · step 1 of 2</p>
-          <h1 className="mt-1 font-display text-3xl text-ink">Which describes you?</h1>
+          <p className="text-sm font-medium uppercase tracking-wide text-gold">Register · step 1 of 2</p>
+          <h1 className="mt-1 font-display text-3xl text-ivory">Which describes you?</h1>
         </div>
         <ul className="space-y-3" aria-label="Choose your category">
           {categories.map((c) => (
@@ -123,13 +123,13 @@ export function LandingClient() {
   if (step === "year" && chosen) {
     const missing = missingYears(chosen.key);
     return (
-      <section className="space-y-6">
+      <section className="landing-green space-y-6">
         {back("category")}
         <div>
-          <p className="text-sm font-medium uppercase tracking-wide text-accent">Register · step 2 of 2</p>
-          <h1 className="mt-1 font-display text-3xl text-ink">Which year are you in?</h1>
+          <p className="text-sm font-medium uppercase tracking-wide text-gold">Register · step 2 of 2</p>
+          <h1 className="mt-1 font-display text-3xl text-ivory">Which year are you in?</h1>
           {missing.length > 0 && (
-            <p className="mt-2 text-sm text-muted">
+            <p className="mt-2 text-sm text-sage">
               {missing.map((y) => `Year ${y}`).join(" and ")} {missing.length > 1 ? "have" : "has"} no{" "}
               {SUBJECT.subjectName} subject, so {missing.length > 1 ? "they are" : "it is"} not listed.
             </p>
@@ -154,12 +154,12 @@ export function LandingClient() {
 
   if (step === "bar") {
     return (
-      <section className="space-y-6">
+      <section className="landing-green space-y-6">
         {back("category")}
         <div>
-          <p className="text-sm font-medium uppercase tracking-wide text-accent">Register · step 2 of 2</p>
-          <h1 className="mt-1 font-display text-3xl text-ink">Have you taken the Bar exam before?</h1>
-          <p className="mt-2 text-sm text-muted">
+          <p className="text-sm font-medium uppercase tracking-wide text-gold">Register · step 2 of 2</p>
+          <h1 className="mt-1 font-display text-3xl text-ivory">Have you taken the Bar exam before?</h1>
+          <p className="mt-2 text-sm text-sage">
             Your answer is private. It stays on this device, is never shown on screen, and only decides
             whether we suggest a short diagnostic first.
           </p>
@@ -180,19 +180,19 @@ export function LandingClient() {
 
   // Page 1 (Design A, "classic law school"): one button, nothing else to choose.
   const pill =
-    "inline-flex items-center gap-2 rounded-full border border-accent bg-accent px-8 py-3 text-lg font-medium text-white transition hover:bg-accent/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+    "register-pulse inline-flex items-center gap-2 rounded-full bg-gold px-9 py-3.5 text-lg font-semibold text-gold-ink transition hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ivory";
   return (
-    <section className="flex flex-col items-center px-2 py-10 text-center sm:py-14">
+    <section className="landing-green flex flex-col items-center px-2 py-10 text-center sm:py-14">
       <ScalesIcon />
-      <h1 className="mt-4 font-display text-4xl tracking-tight text-ink sm:text-5xl">Law AI Tutor</h1>
-      <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-accent">
+      <h1 className="mt-4 font-display text-4xl tracking-tight text-ivory sm:text-5xl">Law AI Tutor</h1>
+      <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-gold">
         {SUBJECT.subjectName} · 2027 Bar syllabus
       </p>
-      <div className="my-6 h-px w-16 bg-line" aria-hidden="true" />
-      <blockquote className="max-w-md font-display text-xl italic leading-snug text-ink/80 sm:text-2xl">
+      <div className="my-6 h-px w-16 bg-gold/60" aria-hidden="true" />
+      <blockquote className="max-w-md font-display text-xl italic leading-snug text-ivory sm:text-2xl">
         &ldquo;Answer first. Then learn why.&rdquo;
       </blockquote>
-      <p className="mt-3 max-w-md text-sm text-muted">
+      <p className="mt-3 max-w-md text-sm text-sage">
         Socratic drills for Philippine law students and bar reviewees: we ask, you answer, and you are
         coached on your weakest part.
       </p>
@@ -203,7 +203,7 @@ export function LandingClient() {
             <button type="button" onClick={() => router.push(categoryPath(group))} className={pill}>
               Continue as {savedLabel}
             </button>
-            <button type="button" onClick={() => setStep("category")} className="text-sm text-muted underline">
+            <button type="button" onClick={() => setStep("category")} className="text-sm text-sage underline hover:text-gold">
               Not you? Register again
             </button>
           </div>
@@ -214,18 +214,18 @@ export function LandingClient() {
         )}
       </div>
 
-      <ul className="mt-10 grid w-full max-w-lg grid-cols-1 gap-3 text-sm text-ink sm:grid-cols-3" aria-label="Why trust it">
-        <li className="rounded-lg border border-line bg-white/70 px-3 py-3">
+      <ul className="mt-10 grid w-full max-w-lg grid-cols-1 gap-3 text-sm text-ivory sm:grid-cols-3" aria-label="Why trust it">
+        <li className="rounded-lg border border-forest-line bg-white/5 px-3 py-3">
           <span className="block font-medium">2027 Bar syllabus</span>
-          <span className="text-xs text-muted">Topics follow Bar Bulletin No. 1-2027</span>
+          <span className="text-xs text-sage">Topics follow Bar Bulletin No. 1-2027</span>
         </li>
-        <li className="rounded-lg border border-line bg-white/70 px-3 py-3">
+        <li className="rounded-lg border border-forest-line bg-white/5 px-3 py-3">
           <span className="block font-medium">Reviewed sources</span>
-          <span className="text-xs text-muted">Never invents a citation</span>
+          <span className="text-xs text-sage">Never invents a citation</span>
         </li>
-        <li className="rounded-lg border border-line bg-white/70 px-3 py-3">
+        <li className="rounded-lg border border-forest-line bg-white/5 px-3 py-3">
           <span className="block font-medium">Private</span>
-          <span className="text-xs text-muted">No password; stays on your device</span>
+          <span className="text-xs text-sage">No password; stays on your device</span>
         </li>
       </ul>
     </section>
@@ -244,7 +244,7 @@ function ScalesIcon() {
       strokeWidth="1.4"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="text-accent"
+      className="text-gold"
       aria-hidden="true"
     >
       <path d="M12 3v18" />
