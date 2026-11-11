@@ -83,7 +83,7 @@ flowchart LR
 ```
 git push (main) ──► GitHub Actions: lint → typecheck → vitest (75) → next build ─┐
                  └► Gitleaks secret scan                                          ├─► green ✓
-                 └► Vercel Git integration: build + deploy to law-tutor-drill.vercel.app
+                 └► Vercel Git integration: build + deploy to law-ai-tutor-taxation.vercel.app
 ```
 The Claude API is faked in tests, so CI needs no API key and costs nothing.
 

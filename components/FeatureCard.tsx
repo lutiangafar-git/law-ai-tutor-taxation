@@ -31,12 +31,40 @@ export function FeatureCard({
   feature,
   topicId,
   lead,
+  step,
+  done,
+  locked,
+  lockReason,
 }: {
   feature: Feature;
   topicId: string;
   lead?: boolean;
+  /** Year 1–2: step number within the topic (1 quiz, 2 recitation, 3 problem). */
+  step?: number;
+  done?: boolean;
+  locked?: boolean;
+  lockReason?: string;
 }) {
   const item = COPY[feature];
+  const heading = (
+    <span className="font-medium text-ink">
+      {step ? `Step ${step}: ` : ""}
+      {item.title}
+      {done ? " ✓" : ""}
+    </span>
+  );
+  if (locked) {
+    return (
+      <div
+        aria-disabled="true"
+        className="block rounded-lg border border-dashed border-line bg-white/40 px-4 py-4 text-muted"
+      >
+        <span aria-hidden="true">🔒 </span>
+        {heading}
+        <span className="mt-1 block text-sm">{lockReason}</span>
+      </div>
+    );
+  }
   return (
     <Link
       href={item.href(topicId)}
@@ -46,7 +74,7 @@ export function FeatureCard({
           : "border-line bg-white/75"
       }`}
     >
-      <span className="font-medium text-ink">{item.title}</span>
+      {heading}
       <span className="mt-1 block text-sm text-muted">{item.blurb}</span>
     </Link>
   );

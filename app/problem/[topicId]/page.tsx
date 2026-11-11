@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { DemoBanner } from "@/components/DemoBanner";
-import { yearQuery } from "@/lib/profiles";
+import { groupForUrl, yearQuery } from "@/lib/profiles";
 import { useParams, useSearchParams } from "next/navigation";
 import { AnswerBox } from "@/components/AnswerBox";
 import { ClassPauseBanner } from "@/components/ClassPauseBanner";
@@ -77,7 +77,7 @@ function ProblemInner() {
     }
 
     fetch(
-      `/api/topics?group=${state.userGroup}${yearQuery(state.studentYear)}&topicId=${topicId}&includeProblem=1`,
+      `/api/topics?group=${groupForUrl(state.userGroup)}${yearQuery(state.studentYear)}&topicId=${topicId}&includeProblem=1`,
     )
       .then((r) => r.json())
       .then((data) => {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DemoBanner } from "@/components/DemoBanner";
-import { yearQuery } from "@/lib/profiles";
+import { groupForUrl, yearQuery } from "@/lib/profiles";
 import { useParams, useRouter } from "next/navigation";
 import { AnswerBox } from "@/components/AnswerBox";
 import { GroupGuard } from "@/components/GroupGuard";
@@ -61,7 +61,7 @@ function QuickCheckInner() {
         ? state.activeDrill
         : null;
 
-    fetch(`/api/topics?group=${state.userGroup}${yearQuery(state.studentYear)}&topicId=${topicId}`)
+    fetch(`/api/topics?group=${groupForUrl(state.userGroup)}${yearQuery(state.studentYear)}&topicId=${topicId}`)
       .then((r) => r.json())
       .then((data) => {
         if (data.topic) {

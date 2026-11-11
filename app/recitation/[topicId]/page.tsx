@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DemoBanner } from "@/components/DemoBanner";
-import { yearQuery } from "@/lib/profiles";
+import { groupForUrl, yearQuery } from "@/lib/profiles";
 import { useParams } from "next/navigation";
 import { AnswerBox } from "@/components/AnswerBox";
 import { ClassPauseBanner } from "@/components/ClassPauseBanner";
@@ -58,7 +58,7 @@ function RecitationInner() {
         ? state.activeDrill
         : null;
 
-    fetch(`/api/topics?group=${state.userGroup}${yearQuery(state.studentYear)}&topicId=${topicId}&includeScenario=1`)
+    fetch(`/api/topics?group=${groupForUrl(state.userGroup)}${yearQuery(state.studentYear)}&topicId=${topicId}&includeScenario=1`)
       .then((r) => r.json())
       .then((data) => {
         if (data.topic) {

@@ -46,8 +46,12 @@ decides which topics appear. Year 1 and Year 2 have no Taxation Law subject, so 
 and the subject reviewers; each notes the past Bar Examination that raised the same issue. Model answers are
 written for this app in the ALAC format and never copied from a reviewer.
 
-**Landing page.** The first screen asks "Who are you practicing as?" and lists the offered years and both bar
-groups. Once the user picks one (and has seen that group's usage notice), they go to the drills page.
+**Landing page and registration.** Page 1 shows one Register button (Continue for a returning user). Registering
+asks for the category (Law student Year 1–2, Law student Year 3–4, Bar reviewee), then the exact year, or for bar
+reviewees "Have you taken the Bar exam before?" (No → `bar-first-time`, Yes → `bar-repeater`). After the usage
+notice the user lands on their category's page (`/year-1-2`, `/year-3-4`, `/bar`). Registration is on the device
+only (no account or password in v1). **Repeater status is confidential:** it only decides the diagnostic; every
+screen says "Bar reviewee", and web addresses carry `bar`, never the repeater status.
 
 **Demo topics.** Until a law-trained reviewer signs off a topic file, it may be published with
 `status: demo`. A demo topic appears with the banner "Demo content: pending lawyer review" on the home
@@ -132,8 +136,10 @@ out, wrong options are removed (multiple choice) or the answer's first letters a
 keeps going until correct. The explanation appears once correct. Year 3–4 and bar reviewees don't get this quiz:
 they practise essay-style answers only.
 
-**Topic order.** Year 1–2 follow the 2027 Bar syllabus in order, one topic after another. Year 3–4 and bar reviewees
-get random topics to test general knowledge.
+**Topic order.** Year 1–2 follow the 2027 Bar syllabus in order, one topic after another, and within each topic go
+step by step: quiz → recitation (Socratic, step by step) → bar-style problem, each unlocking the next, so they are not
+rushed into complicated questions but still practise the bar-style answers their exams use. Year 3–4 and bar reviewees
+get random topics and bar-style problems immediately. Bar repeaters must finish the diagnostic first.
 
 **Recitation drill (Year 1–4 and bar reviewees, outside class): 5–10 minutes**
 Steps: 1. Facts or provision → 2. Issue → 3. Rule or ruling → 4. Reasoning → 5. Apply it to a short new fact pattern.
@@ -304,10 +310,11 @@ Each step scores 0 (missing or wrong), 1 (partly right) or 2 (complete and accur
 
 **Landing page, subject scope and original problems (added 12 Nov 2026)**
 
-42. Given a first visit, then the landing page asks "Who are you practicing as?" and lists only the years that have
-    Taxation Law topics plus both bar groups; after the user picks one and accepts the usage notice, the drills page opens.
-43. Given a returning user who has seen the notice, then the landing page offers "Continue as …" for their saved choice,
-    and choosing the same option goes straight to the drills page.
+42. Given a first visit, then page 1 shows one Register button and no list of years or groups. Register asks "Which
+    describes you?" with only the categories this app serves, then the exact year (students) or "Have you taken the Bar
+    exam before?" (bar reviewees); after the usage notice, the category's page opens (`/year-1-2`, `/year-3-4` or `/bar`).
+43. Given a returning user who has seen the notice, then page 1 shows one "Continue as …" button to their category's page,
+    and "Change my details" (Settings or the drills page) restarts registration at the category step.
 44. Given a year with no Taxation Law topics in the year plan, then that year is not offered.
 45. Given any topic file, then its subject is one of this app's subject areas (no topics from another bar subject) and its
     `year-1`/`year-2`/`year-3` tags match the year plan in `lib/subject.ts` exactly.
@@ -335,6 +342,23 @@ Each step scores 0 (missing or wrong), 1 (partly right) or 2 (complete and accur
     "Next up: …"; a topic is finished once its quiz and at least one problem drill are done, and is marked ✓.
 56. Given a Year 3–4 user or a bar reviewee, then the drills page starts on a random topic and offers a "Random topic"
     button that never picks the same topic twice in a row (when there is a choice).
+
+**Registration and confidential repeater status (added 12 Nov 2026)**
+
+57. Given a bar reviewee who answers No to "Have you taken the Bar exam before?", then they are saved as `bar-first-time`;
+    Yes saves `bar-repeater`. The question says the answer is private and stays on the device.
+58. Given any bar reviewee, then no screen (landing, drills page, Settings, diagnostic) shows "repeater" or "first-time";
+    every screen says "Bar reviewee", and the diagnostic wording and its Skip option are the same for both.
+59. Given any bar reviewee, then requests from the browser carry `group=bar`, never the repeater status.
+60. Given a user on another category's page (e.g. a Year 2 student opening `/bar`), then they are sent to their own page.
+
+**Step by step for Year 1–2; required diagnostic for repeaters (added 12 Nov 2026)**
+
+61. Given a Year 1–2 student on a topic, then the drills appear as Step 1 quiz, Step 2 recitation, Step 3 problem drill;
+    the recitation stays locked until that topic's quiz is done, and the problem drill until its recitation is done.
+    Year 3–4 and bar reviewees have no locks and can start a bar-style problem immediately.
+62. Given a bar repeater who has not finished the diagnostic, then the bar page shows only the diagnostic (no Skip, no
+    topic list) until all diagnostic problems are answered; a first-time taker may skip it. The wording is the same for both.
 
 ## 6. Planned improvements (not built yet)
 Requested after the first test run (10 Nov 2026). Build these in a later round; they are not part of v1's

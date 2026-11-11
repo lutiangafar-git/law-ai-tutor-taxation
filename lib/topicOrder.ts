@@ -93,3 +93,58 @@ export function finishedTopicIds(state: {
   const problem = new Set((state.problemScores ?? []).map((r) => r.topicId));
   return new Set([...quiz].filter((id) => problem.has(id)));
 }
+
+// ------------------------------------------------------------------ Year 1–2 step order within a topic
+
+export type StepState = { done: boolean; locked: boolean; lockReason?: string };
+
+/**
+ * Year 1–2 go one step at a time within each topic (spec §3.2, criterion 61):
+ *   1. objective & multiple-choice quiz → 2. recitation drill (step-by-step) → 3. problem drill (bar-style).
+ * Each step unlocks when the previous one is done. Year 3–4 and bar reviewees have no locks:
+ * they get bar-style problems immediately.
+ */
+export function topicSteps(
+  group: UserGroup | null,
+  topicId: string,
+  state: {
+    quizResults?: { topicId: string }[];
+    recitationScores?: { topicId: string }[];
+    problemScores?: { topicId: string }[];
+  },
+): Record<"objective-quiz" | "recitation-drill" | "problem-drill", StepState> {
+  const has = (list: { topicId: string }[] | undefined) => (list ?? []).some((r) => r.topicId === topicId);
+  const quiz = has(state.quizResults);
+  const recitation = has(state.recitationScores);
+  const problem = has(state.problemScores);
+  const sequential = isSequentialGroup(group);
+  return {
+    "objective-quiz": { done: quiz, locked: false },
+    "recitation-drill": {
+      done: recitation,
+      locked: sequential && !quiz,
+      lockReason: sequential && !quiz ? "Finish the quiz on this topic first." : undefined,
+    },
+    "problem-drill": {
+      done: problem,
+      locked: sequential && !recitation,
+      lockReason: sequential && !recitation ? "Finish the recitation drill on this topic first." : undefined,
+    },
+  };
+}
+
+// ------------------------------------------------------------------ diagnostic
+
+/** Bar repeaters must finish the diagnostic before regular drills; first-time takers may skip it. */
+export function diagnosticRequired(group: UserGroup | null, completed: boolean): boolean {
+  return group === "bar-repeater" && !completed;
+}
+
+/** Diagnostic topics not yet answered, in order. */
+export function remainingDiagnostic(
+  diagnosticTopicIds: string[],
+  problemScores: { topicId: string; isDiagnostic?: boolean }[],
+): string[] {
+  const done = new Set(problemScores.filter((p) => p.isDiagnostic).map((p) => p.topicId));
+  return diagnosticTopicIds.filter((id) => !done.has(id));
+}

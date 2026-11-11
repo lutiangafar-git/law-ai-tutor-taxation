@@ -7,7 +7,7 @@ import { ClassPauseBanner } from "@/components/ClassPauseBanner";
 import { DemoBanner } from "@/components/DemoBanner";
 import { GroupGuard } from "@/components/GroupGuard";
 import { canUseFeature, isPausedForClass } from "@/lib/access";
-import { yearQuery } from "@/lib/profiles";
+import { groupForUrl, yearQuery } from "@/lib/profiles";
 import type { ClientQuizItem, QuizCheckResult } from "@/lib/quiz";
 import { addQuizResult, clearActiveDrill, loadState, saveActiveDrill } from "@/lib/storage";
 import type { StudentYear } from "@/lib/types";
@@ -44,7 +44,7 @@ function QuizInner() {
     setAllowed(ok);
     if (!ok) return;
 
-    fetch(`/api/quiz?group=${state.userGroup}${yearQuery(state.studentYear)}&topicId=${topicId}`)
+    fetch(`/api/quiz?group=${groupForUrl(state.userGroup)}${yearQuery(state.studentYear)}&topicId=${topicId}`)
       .then((r) => r.json())
       .then((data: { topic?: { title: string; isDemo: boolean }; items?: ClientQuizItem[] }) => {
         if (!data.items) {

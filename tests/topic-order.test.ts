@@ -63,3 +63,59 @@ describe("Year 1–2 sequential, others random", () => {
     expect(pickRandomTopic([], null)).toBeNull();
   });
 });
+
+import { diagnosticRequired, remainingDiagnostic, topicSteps } from "@/lib/topicOrder";
+
+describe("Year 1–2 step by step within a topic", () => {
+  const none = { quizResults: [], recitationScores: [], problemScores: [] };
+
+  it("Year 1–2: quiz first, then recitation, then the bar-style problem", () => {
+    let s = topicSteps("year-1-2", "t", none);
+    expect(s["objective-quiz"].locked).toBe(false);
+    expect(s["recitation-drill"].locked).toBe(true);
+    expect(s["problem-drill"].locked).toBe(true);
+
+    s = topicSteps("year-1-2", "t", { ...none, quizResults: [{ topicId: "t" }] });
+    expect(s["objective-quiz"].done).toBe(true);
+    expect(s["recitation-drill"].locked).toBe(false);
+    expect(s["problem-drill"].locked).toBe(true);
+
+    s = topicSteps("year-1-2", "t", {
+      ...none,
+      quizResults: [{ topicId: "t" }],
+      recitationScores: [{ topicId: "t" }],
+    });
+    expect(s["problem-drill"].locked).toBe(false);
+  });
+
+  it("progress on one topic doesn't unlock another", () => {
+    const s = topicSteps("year-1-2", "other", { ...none, quizResults: [{ topicId: "t" }] });
+    expect(s["recitation-drill"].locked).toBe(true);
+  });
+
+  it("Year 3–4 and bar reviewees get bar-style problems immediately", () => {
+    for (const g of ["year-3-4", "bar-first-time", "bar-repeater"] as const) {
+      const s = topicSteps(g, "t", none);
+      expect(s["recitation-drill"].locked).toBe(false);
+      expect(s["problem-drill"].locked).toBe(false);
+    }
+  });
+});
+
+describe("diagnostic", () => {
+  it("is required for repeaters until finished, optional for first-time takers", () => {
+    expect(diagnosticRequired("bar-repeater", false)).toBe(true);
+    expect(diagnosticRequired("bar-repeater", true)).toBe(false);
+    expect(diagnosticRequired("bar-first-time", false)).toBe(false);
+    expect(diagnosticRequired("year-3-4", false)).toBe(false);
+  });
+
+  it("lists the diagnostic problems still to answer", () => {
+    expect(
+      remainingDiagnostic(["a", "b", "c"], [
+        { topicId: "a", isDiagnostic: true },
+        { topicId: "b" },
+      ]),
+    ).toEqual(["b", "c"]);
+  });
+});

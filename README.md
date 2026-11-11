@@ -23,9 +23,12 @@ policies: Year 1–2 students are paused during class hours, and Year 3–4 stud
 | Year 4 student | All Taxation Law topics in the 2027 Bar syllabus | In class (Quick Check) and after |
 | Bar reviewee (first-time or repeater) | All Taxation Law topics in the 2027 Bar syllabus | Anytime; repeaters start with a diagnostic |
 
-**Landing page first.** Every visit starts with *"Who are you practicing as?"*. The student picks their law
-school year or bar review status, and only then goes to the drills page for that year's topics. Years with
-no Taxation Law topics are not offered. Topics are limited to the **Syllabus for the 2027 Bar Examinations
+**Register first.** Page 1 shows one **Register** button (or **Continue** for a returning user). Registering asks
+*"Which describes you?"* (Law student Year 1–2, Law student Year 3–4, or Bar reviewee), then the exact year, or, for
+bar reviewees, *"Have you taken the Bar exam before?"* (No = first-time taker, Yes = repeater). The user then lands on
+their category's own page: `/year-1-2`, `/year-3-4` or `/bar`. **Repeater status is confidential:** it stays on the
+device, is never shown on screen (everyone sees "Bar reviewee") and never appears in a web address. There is no
+account or password in v1. Years with no Taxation Law topics are not offered. Topics are limited to the **Syllabus for the 2027 Bar Examinations
 (Commercial and Taxation Laws, Taxation Law part (VII))**, Bar Bulletin No. 1-2027. **Year 1–2** work through their topics in syllabus order (the drills
 page suggests the next unfinished one); **Year 3–4 and bar reviewees** get random topics to test general knowledge.
 
@@ -59,7 +62,7 @@ reviewed materials for this drill."* Every score is labelled **"Practice score"*
 > review"** in the app until a law-trained reviewer signs them off. Do not rely on them as legal advice.
 
 ## Sister apps
-- **Law AI Tutor - Civil**: https://law-tutor-drill.vercel.app
+- **Law AI Tutor - Civil**: https://law-ai-tutor-civil.vercel.app
 - **Law AI Tutor - Commercial**: https://law-ai-tutor-commercial.vercel.app
 - **Law AI Tutor - Taxation** (this app): https://law-ai-tutor-taxation.vercel.app
 
@@ -73,7 +76,7 @@ Requirements: Node.js 20+ and an Anthropic API key.
 
 ```bash
 git clone https://github.com/lutiangafar-git/law-ai-tutor-taxation.git
-cd law-tutor-drill
+cd law-ai-tutor-taxation
 npm install
 cp .env.example .env.local      # then paste your key after ANTHROPIC_API_KEY=
 npm run dev                     # open http://localhost:3000
@@ -106,7 +109,7 @@ template, and CI runs a **Gitleaks** scan over the full history on every push. T
 |---|---|
 | [docs/01-idea-validation-report.md](docs/01-idea-validation-report.md) | All 7 validation steps with evidence, "why now" and target user |
 | [docs/02-prd.md](docs/02-prd.md) | One-page PRD with acceptance criteria for each feature |
-| [spec.md](spec.md) | Full spec: context, inputs/outputs, behavior rules, constraints, 58 acceptance criteria, revision log |
+| [spec.md](spec.md) | Full spec: context, inputs/outputs, behavior rules, constraints, 62 acceptance criteria, revision log |
 | [docs/03-architecture.md](docs/03-architecture.md) | Architecture diagram, data flow, design decisions, security |
 | [CLAUDE.md](CLAUDE.md) · [agents.md](agents.md) · [.cursorrules](.cursorrules) | Rules for AI coding tools (Claude Code, other agents, Cursor) |
 | [docs/04-reflection.md](docs/04-reflection.md) | What I learned, challenges, v2 improvements |

@@ -49,10 +49,13 @@ Full requirements are in `spec.md`. Follow it. If the code and the spec disagree
 - CI (GitHub Actions) runs all four plus a Gitleaks secret scan on every push. Keep it green.
 
 ## Architecture (where things live)
-- `/app/page.tsx` + `/components/LandingClient.tsx`: landing page. The user picks Year 1–4 or bar status, sees
-  the usage notice, then goes to `/drills`.
-- `/app/drills/page.tsx`: drills page. Shows only the features allowed for the user's group and the current time.
+- `/app/page.tsx` + `/components/LandingClient.tsx`: page 1 with one Register button; registration steps
+  (category → year, or "taken the Bar before?") → usage notice → the category's page.
+- `/app/year-1-2`, `/app/year-3-4`, `/app/bar` + `/components/DrillsHome.tsx`: one drills page per category. Shows only
+  the features allowed for the user's group and the current time. `/app/drills` redirects to the right one.
 - `/app/onboarding/page.tsx`: old address, redirects to the landing page
+- **Repeater status is confidential.** Never show "repeater" or "first-time" on screen (use `displayLabel()`), and
+  never put it in a URL (use `groupForUrl()`, which sends "bar").
 - `/app/recitation/[topicId]/page.tsx`: recitation drill
 - `/app/quick-check/[topicId]/page.tsx`: In-class Quick Check (Year 3–4 only)
 - `/app/problem/[topicId]/page.tsx`: problem drill (exam prep and bar)

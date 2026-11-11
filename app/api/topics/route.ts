@@ -11,7 +11,10 @@ export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const group = searchParams.get("group") as UserGroup | null;
+  // Browsers send "bar" for every bar reviewee, so repeater status never appears in a URL.
+  // Both bar groups see the same topics.
+  const rawGroup = searchParams.get("group");
+  const group = (rawGroup === "bar" ? "bar-first-time" : rawGroup) as UserGroup | null;
   const topicId = searchParams.get("topicId");
   const year = parseStudentYear(searchParams.get("year"));
   const includeProblem = searchParams.get("includeProblem") === "1";

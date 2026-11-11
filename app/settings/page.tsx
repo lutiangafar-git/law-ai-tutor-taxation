@@ -11,10 +11,9 @@ import {
   clearClassSchedule,
   loadState,
   setClassSchedule,
-  setUserGroup,
   updateState,
 } from "@/lib/storage";
-import { PROFILE_OPTIONS, findProfileKey, type ProfileOption } from "@/lib/profiles";
+import { displayLabel } from "@/lib/profiles";
 import type { ClassBlock, UserGroup } from "@/lib/types";
 
 const DAY_OPTIONS = [
@@ -30,7 +29,7 @@ const DAY_OPTIONS = [
 
 function SettingsInner() {
   const [group, setGroup] = useState<UserGroup | null>(null);
-  const [profileKey, setProfileKey] = useState<string | null>(null);
+  const [label, setLabel] = useState("");
   const [blocks, setBlocks] = useState<ClassBlock[]>([]);
   const [day, setDay] = useState(1);
   const [start, setStart] = useState("6:00 PM");
@@ -40,18 +39,14 @@ function SettingsInner() {
   useEffect(() => {
     const state = loadState();
     setGroup(state.userGroup);
-    setProfileKey(findProfileKey(state.userGroup, state.studentYear));
+    setLabel(displayLabel(state.userGroup, state.studentYear));
     setBlocks(state.classSchedule.blocks);
   }, []);
 
-  function saveGroup(option: ProfileOption) {
-    const updated = setUserGroup(option.group, option.year);
+  function changeDetails() {
+    // Re-register through the same steps as the landing page; the notice is shown again.
     updateState({ usageNoticeSeen: false });
-    setGroup(option.group);
-    setProfileKey(option.key);
-    setBlocks(updated.classSchedule.blocks);
-    setMessage("Group updated. You’ll see the usage notice again.");
-    window.location.href = "/?notice=1";
+    window.location.href = "/?register=1";
   }
 
   function addBlock() {
@@ -101,23 +96,15 @@ function SettingsInner() {
       </div>
 
       <div className="space-y-3">
-        <h2 className="font-display text-xl">Your group</h2>
-        <div className="grid gap-2">
-          {PROFILE_OPTIONS.map((opt) => (
-            <label
-              key={opt.key}
-              className="flex items-center gap-3 rounded-md border border-line bg-white/70 px-3 py-3"
-            >
-              <input
-                type="radio"
-                name="group"
-                checked={profileKey === opt.key}
-                onChange={() => saveGroup(opt)}
-              />
-              <span>{opt.label}</span>
-            </label>
-          ))}
-        </div>
+        <h2 className="font-display text-xl">You are registered as</h2>
+        <p className="rounded-md border border-line bg-white/70 px-3 py-3">{label || "Not registered yet"}</p>
+        <button
+          type="button"
+          onClick={changeDetails}
+          className="rounded-md border border-accent px-4 py-2 text-sm font-medium text-accent"
+        >
+          Change my details
+        </button>
       </div>
 
       {showSchedule && (
