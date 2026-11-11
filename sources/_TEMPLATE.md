@@ -3,6 +3,7 @@ topicId: remedies-protest-nirc-sec-228
 title: "NIRC, Sec. 228: Protesting a BIR assessment and appealing to the CTA"
 subject: Tax Remedies            # must be one of the areas in lib/subject.ts
 syllabusRef: "VII.D.5.a"           # REQUIRED: place in the 2027 Bar syllabus outline; sets the topic order
+syllabusYear: 2027                 # REQUIRED: Bar syllabus year this topic was checked against
 yearLevels: [year-3, year-4, bar]   # must match the year plan in lib/subject.ts (tests check this)
                                   # (Year 4 and bar reviewees cover all of Taxation Law)
 status: demo                      # optional: shows the topic with a 'pending lawyer review' banner.

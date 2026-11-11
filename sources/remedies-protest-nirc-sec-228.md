@@ -3,6 +3,7 @@ topicId: remedies-protest-nirc-sec-228
 title: "NIRC, Sec. 228: Protesting a BIR assessment and appealing to the CTA"
 subject: Tax Remedies
 syllabusRef: "VII.D.5.a"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["assessment", "protest", "request for reconsideration or reinvestigation", "thirty (30) days", "sixty (60) days", "one hundred eighty (180) days", "final, executory and demandable"]

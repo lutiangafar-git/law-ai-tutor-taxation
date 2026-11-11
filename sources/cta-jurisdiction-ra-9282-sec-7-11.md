@@ -3,6 +3,7 @@ topicId: cta-jurisdiction-ra-9282-sec-7-11
 title: "RA 9282, Secs. 7 and 11: Exclusive appellate jurisdiction of the Court of Tax Appeals"
 subject: Court of Tax Appeals
 syllabusRef: "VII.D.7.a.i"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["exclusive appellate jurisdiction", "Court of Tax Appeals", "local tax cases", "inaction shall be deemed a denial", "thirty (30) days", "petition for review"]

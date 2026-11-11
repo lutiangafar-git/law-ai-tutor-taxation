@@ -3,6 +3,7 @@ topicId: local-tax-protest-lgc-sec-195
 title: "Local Government Code, Sec. 195: Protesting a local tax assessment"
 subject: Local Taxation
 syllabusRef: "VII.C.5.a"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["notice of assessment", "written protest", "sixty (60) days", "thirty (30) days", "final and executory", "conclusive and unappealable"]

@@ -3,6 +3,7 @@ topicId: income-capital-asset-sec-39
 title: "NIRC, Sec. 39(A)(1): Capital assets versus ordinary assets"
 subject: Income Tax
 syllabusRef: "VII.B.1.b.iv"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["capital asset", "ordinary asset", "stock in trade", "held primarily for sale to customers", "used in trade or business"]

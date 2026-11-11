@@ -26,6 +26,7 @@ import {
 } from "@/lib/profiles";
 import type { Feature, UserGroup } from "@/lib/types";
 import { SUBJECT } from "@/lib/subject";
+import { SYLLABUS_LABEL } from "@/lib/barExam";
 import {
   finishedTopicIds,
   isSequentialGroup,
@@ -254,7 +255,7 @@ function HomeInner({ category }: { category: Category }) {
                 </p>
                 {sequential ? (
                   <p className="rounded-md border border-line bg-white/70 p-3 text-sm">
-                    Year 1–2 topics follow the 2027 Bar syllabus in order. {finishedCount} of {topics.length}{" "}
+                    Year 1–2 topics follow the {SYLLABUS_LABEL} in order. {finishedCount} of {topics.length}{" "}
                     finished (quiz + problem drill).{" "}
                     {nextTopic ? (
                       <>

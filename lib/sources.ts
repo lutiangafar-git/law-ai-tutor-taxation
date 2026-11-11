@@ -111,6 +111,7 @@ function parseTopicFile(filePath: string): SourceTopic | null {
     subject: String(data.subject ?? ""),
     yearLevels,
     syllabusRef: String(data.syllabusRef ?? "").trim(),
+    syllabusYear: Number(data.syllabusYear ?? 0),
     syllabusWeek:
       data.syllabusWeek !== undefined ? Number(data.syllabusWeek) : undefined,
     citation: String(data.citation ?? ""),

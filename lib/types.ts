@@ -51,6 +51,8 @@ export interface SourceMeta {
   syllabusWeek?: number;
   /** Place in the 2027 Bar syllabus outline, e.g. "VIII.A.7" (see /lib/topicOrder.ts). */
   syllabusRef: string;
+  /** Bar syllabus year this topic was last checked against (must equal BAR_EXAM.year). */
+  syllabusYear: number;
   citation: string;
   link: string;
   reviewedBy: string;

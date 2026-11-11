@@ -13,6 +13,7 @@ import {
   type Category,
 } from "@/lib/profiles";
 import { SUBJECT } from "@/lib/subject";
+import { BAR_EXAM, SYLLABUS_LABEL } from "@/lib/barExam";
 import type { StudentYear, UserGroup } from "@/lib/types";
 
 type Step = "start" | "category" | "year" | "bar" | "notice";
@@ -186,7 +187,7 @@ export function LandingClient() {
       <ScalesIcon />
       <h1 className="mt-4 font-display text-4xl tracking-tight text-ivory sm:text-5xl">Law AI Tutor</h1>
       <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-gold">
-        {SUBJECT.subjectName} · 2027 Bar syllabus
+        {SUBJECT.subjectName} · {SYLLABUS_LABEL}
       </p>
       <div className="my-6 h-px w-16 bg-gold/60" aria-hidden="true" />
       <blockquote className="max-w-md font-display text-xl italic leading-snug text-ivory sm:text-2xl">
@@ -194,7 +195,7 @@ export function LandingClient() {
       </blockquote>
       <p className="mt-3 max-w-md text-sm text-sage">
         Socratic drills for Philippine law students and bar reviewees: we ask, you answer, and you are
-        coached on your weakest part.
+        coached on areas to improve.
       </p>
 
       <div className="mt-8">
@@ -216,12 +217,12 @@ export function LandingClient() {
 
       <ul className="mt-10 grid w-full max-w-lg grid-cols-1 gap-3 text-sm text-ivory sm:grid-cols-3" aria-label="Why trust it">
         <li className="rounded-lg border border-forest-line bg-white/5 px-3 py-3">
-          <span className="block font-medium">2027 Bar syllabus</span>
-          <span className="text-xs text-sage">Topics follow Bar Bulletin No. 1-2027</span>
+          <span className="block font-medium">{SYLLABUS_LABEL}</span>
+          <span className="text-xs text-sage">Every drill matches {BAR_EXAM.bulletin}</span>
         </li>
         <li className="rounded-lg border border-forest-line bg-white/5 px-3 py-3">
           <span className="block font-medium">Reviewed sources</span>
-          <span className="text-xs text-sage">Never invents a citation</span>
+          <span className="text-xs text-sage">Cites laws and Supreme Court cases, checked, never invented</span>
         </li>
         <li className="rounded-lg border border-forest-line bg-white/5 px-3 py-3">
           <span className="block font-medium">Private</span>

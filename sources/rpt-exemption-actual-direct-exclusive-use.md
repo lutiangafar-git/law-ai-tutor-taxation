@@ -3,6 +3,7 @@ topicId: rpt-exemption-actual-direct-exclusive-use
 title: "LGC Sec. 234(b) and Constitution Art. VI, Sec. 28(3): Real property tax exemption by actual use"
 subject: Real Property Taxation
 syllabusRef: "VII.C.6.b"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["real property tax", "actually, directly, and exclusively used", "religious, charitable or educational purposes", "exemption", "use, not ownership"]

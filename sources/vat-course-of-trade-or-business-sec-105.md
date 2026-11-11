@@ -3,6 +3,7 @@ topicId: vat-course-of-trade-or-business-sec-105
 title: "NIRC, Sec. 105: Who is liable for VAT; 'in the course of trade or business'"
 subject: Value-Added Tax
 syllabusRef: "VII.B.2.a"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["value-added tax", "in the course of trade or business", "regular conduct or pursuit", "indirect tax", "shifted or passed on"]

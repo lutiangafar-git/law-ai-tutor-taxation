@@ -381,7 +381,7 @@ function ProblemInner() {
             label={
               phase === "answering"
                 ? "Your full ALAC answer"
-                : `Rewrite your ${weakElement ?? "weakest part"} only`
+                : `Rewrite your ${weakElement ?? "part to improve"} only`
             }
           />
           <button

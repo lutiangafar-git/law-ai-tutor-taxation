@@ -1,5 +1,6 @@
 import type { StudentYear, UserGroup } from "./types";
 import { SUBJECT, areasForYear, listAreas, offeredYears } from "./subject";
+import { SYLLABUS_LABEL } from "./barExam";
 
 /**
  * Registration (spec §1 "Landing page", criteria 42–44 and 57–62).
@@ -38,7 +39,7 @@ function studentOption(year: StudentYear): ProfileOption {
   };
 }
 
-const BAR_BLURB = `All ${SUBJECT.subjectName} topics in the 2027 Bar syllabus, anytime.`;
+const BAR_BLURB = `All ${SUBJECT.subjectName} topics in the ${SYLLABUS_LABEL}, anytime.`;
 
 export const PROFILE_OPTIONS: ProfileOption[] = [
   ...offeredYears().map(studentOption),

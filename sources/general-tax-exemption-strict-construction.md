@@ -3,6 +3,7 @@ topicId: general-tax-exemption-strict-construction
 title: "Constitution, Art. VI, Sec. 28(4): Granting tax exemptions, and how they are read"
 subject: General Principles of Taxation
 syllabusRef: "VII.A.4.b"
+syllabusYear: 2027
 yearLevels: [year-3, year-4, bar]
 status: demo
 keyTerms: ["tax exemption", "majority of all the Members", "strictissimi juris", "construed strictly against the taxpayer", "burden of proof"]
