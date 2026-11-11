@@ -178,41 +178,91 @@ export function LandingClient() {
     );
   }
 
-  // Page 1: one button.
+  // Page 1 (Design A, "classic law school"): one button, nothing else to choose.
+  const pill =
+    "inline-flex items-center gap-2 rounded-full border border-accent bg-accent px-8 py-3 text-lg font-medium text-white transition hover:bg-accent/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
   return (
-    <section className="flex flex-col items-center gap-6 py-10 text-center">
-      <p className="text-sm font-medium uppercase tracking-wide text-accent">
+    <section className="flex flex-col items-center px-2 py-10 text-center sm:py-14">
+      <ScalesIcon />
+      <h1 className="mt-4 font-display text-4xl tracking-tight text-ink sm:text-5xl">Law AI Tutor</h1>
+      <p className="mt-2 text-sm font-medium uppercase tracking-[0.18em] text-accent">
         {SUBJECT.subjectName} · 2027 Bar syllabus
       </p>
-      <h1 className="font-display text-4xl text-ink">{SUBJECT.appName}</h1>
-      <p className="max-w-md text-muted">
-        Socratic drills: we ask, you answer, and you get coached on your weakest part.
+      <div className="my-6 h-px w-16 bg-line" aria-hidden="true" />
+      <blockquote className="max-w-md font-display text-xl italic leading-snug text-ink/80 sm:text-2xl">
+        &ldquo;Answer first. Then learn why.&rdquo;
+      </blockquote>
+      <p className="mt-3 max-w-md text-sm text-muted">
+        Socratic drills for Philippine law students and bar reviewees: we ask, you answer, and you are
+        coached on your weakest part.
       </p>
-      {savedReady && savedLabel ? (
-        <div className="flex flex-col items-center gap-3">
-          <button
-            type="button"
-            onClick={() => router.push(categoryPath(group))}
-            className="flex items-center gap-3 rounded-full bg-accent px-8 py-4 text-lg font-medium text-white shadow"
-          >
-            <span aria-hidden="true">▶</span> Continue as {savedLabel}
+
+      <div className="mt-8">
+        {savedReady && savedLabel ? (
+          <div className="flex flex-col items-center gap-3">
+            <button type="button" onClick={() => router.push(categoryPath(group))} className={pill}>
+              Continue as {savedLabel}
+            </button>
+            <button type="button" onClick={() => setStep("category")} className="text-sm text-muted underline">
+              Not you? Register again
+            </button>
+          </div>
+        ) : (
+          <button type="button" onClick={() => setStep("category")} className={pill}>
+            <UserPlusIcon /> Register
           </button>
-          <button type="button" onClick={() => setStep("category")} className="text-sm text-muted underline">
-            Not you? Register again
-          </button>
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setStep("category")}
-          className="flex items-center gap-3 rounded-full bg-accent px-8 py-4 text-lg font-medium text-white shadow"
-        >
-          <span aria-hidden="true" className="text-2xl leading-none">＋</span> Register
-        </button>
-      )}
-      <p className="max-w-sm text-xs text-muted">
-        No account or password: your details stay on this device only.
-      </p>
+        )}
+      </div>
+
+      <ul className="mt-10 grid w-full max-w-lg grid-cols-1 gap-3 text-sm text-ink sm:grid-cols-3" aria-label="Why trust it">
+        <li className="rounded-lg border border-line bg-white/70 px-3 py-3">
+          <span className="block font-medium">2027 Bar syllabus</span>
+          <span className="text-xs text-muted">Topics follow Bar Bulletin No. 1-2027</span>
+        </li>
+        <li className="rounded-lg border border-line bg-white/70 px-3 py-3">
+          <span className="block font-medium">Reviewed sources</span>
+          <span className="text-xs text-muted">Never invents a citation</span>
+        </li>
+        <li className="rounded-lg border border-line bg-white/70 px-3 py-3">
+          <span className="block font-medium">Private</span>
+          <span className="text-xs text-muted">No password; stays on your device</span>
+        </li>
+      </ul>
     </section>
+  );
+}
+
+/** Scales of justice, drawn inline so no icon library is needed. */
+function ScalesIcon() {
+  return (
+    <svg
+      width="56"
+      height="56"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="text-accent"
+      aria-hidden="true"
+    >
+      <path d="M12 3v18" />
+      <path d="M8 21h8" />
+      <path d="M5 7h14" />
+      <path d="M12 7l-1.2-1.6h2.4z" />
+      <path d="M5 7l-3 6a3 3 0 0 0 6 0z" />
+      <path d="M19 7l-3 6a3 3 0 0 0 6 0z" />
+    </svg>
+  );
+}
+
+function UserPlusIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="9" cy="8" r="4" />
+      <path d="M3 21v-1a6 6 0 0 1 12 0v1" />
+      <path d="M19 8v6M16 11h6" />
+    </svg>
   );
 }
