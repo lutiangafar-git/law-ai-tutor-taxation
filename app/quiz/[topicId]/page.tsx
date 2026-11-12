@@ -30,6 +30,8 @@ function QuizInner() {
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<QuizCheckResult | null>(null);
   const [hints, setHints] = useState<string[]>([]);
+  /** Wrong answers already tried on this question: greyed out and struck through. */
+  const [tried, setTried] = useState<string[]>([]);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -102,6 +104,7 @@ function QuizInner() {
       setResult(check);
       if (!check.correct) {
         setWrongTries((n) => n + 1);
+        setTried((t) => (t.includes(given) ? t : [...t, given]));
         if (check.hint && !hints.includes(check.hint)) setHints((h) => [...h, check.hint!]);
       }
     } catch {
@@ -131,6 +134,7 @@ function QuizInner() {
     setAnswer("");
     setResult(null);
     setHints([]);
+    setTried([]);
     saveActiveDrill({
       feature: "objective-quiz",
       topicId,
@@ -201,26 +205,34 @@ function QuizInner() {
             <ul className="space-y-2">
               {item.choices.map((c) => {
                 const out = eliminated.has(c.key);
+                const wasTried = tried.includes(c.key);
                 const isAnswer = solved && result?.answer === c.key;
                 return (
                   <li key={c.key}>
                     <button
                       type="button"
-                      disabled={busy || solved || out}
+                      disabled={busy || solved || out || wasTried}
                       onClick={() => {
                         setAnswer(c.key);
                         void submit(c.key);
                       }}
-                      className={`w-full rounded-md border px-3 py-3 text-left ${
+                      className={`flex w-full items-start justify-between gap-3 rounded-md border px-3 py-3 text-left ${
                         isAnswer
                           ? "border-emerald-500 bg-emerald-50"
-                          : out
-                            ? "border-line bg-white/40 text-muted line-through"
-                            : "border-line bg-white hover:border-accent"
+                          : wasTried
+                            ? "border-red-200 bg-gray-100 text-gray-500"
+                            : out
+                              ? "border-line bg-white/40 text-muted line-through"
+                              : "border-line bg-white hover:border-accent"
                       }`}
                     >
-                      <strong>{c.key})</strong> {c.text}
-                      {out && <span className="sr-only"> (removed)</span>}
+                      <span className={wasTried ? "line-through decoration-red-500" : undefined}>
+                        <strong>{c.key})</strong> {c.text}
+                      </span>
+                      {wasTried && (
+                        <span className="shrink-0 text-xs font-semibold text-red-700">✗ You tried this</span>
+                      )}
+                      {out && !wasTried && <span className="sr-only"> (removed)</span>}
                     </button>
                   </li>
                 );
@@ -253,6 +265,17 @@ function QuizInner() {
               >
                 {busy ? "Checking…" : "Check"}
               </button>
+              {tried.length > 0 && !solved && (
+                <p className="text-sm text-gray-500">
+                  <span className="font-semibold text-red-700">✗ You tried: </span>
+                  {tried.map((t, i) => (
+                    <span key={t}>
+                      {i > 0 && ", "}
+                      <span className="line-through decoration-red-500">{t}</span>
+                    </span>
+                  ))}
+                </p>
+              )}
             </form>
           )}
 
