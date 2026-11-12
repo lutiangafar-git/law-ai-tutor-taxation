@@ -10,6 +10,7 @@ import { GroupGuard } from "@/components/GroupGuard";
 import { StepGuard } from "@/components/StepGuard";
 import { canUseFeature, isPausedForClass } from "@/lib/access";
 import { RECITATION_STEPS } from "@/lib/prompts/recitation";
+import { lastRecitation, mergeStepScores, weakRecitationSteps } from "@/lib/adaptive";
 import {
   addRecitationScore,
   clearActiveDrill,
@@ -41,6 +42,12 @@ function RecitationInner() {
   const [question, setQuestion] = useState("Loading…");
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
+  /** Re-drill: weak steps from the last recitation on this topic, offered before starting. */
+  const [offer, setOffer] = useState<{ weak: number[]; last: number[] } | null>(null);
+  /** Focus mode: the weak steps still to practise, and their new scores. */
+  const [focus, setFocus] = useState<number[] | null>(null);
+  const [focusScores, setFocusScores] = useState<Record<number, number>>({});
+  const [lastBefore, setLastBefore] = useState<number[]>([]);
 
   useEffect(() => {
     const state = loadState();
@@ -79,7 +86,46 @@ function RecitationInner() {
       return;
     }
 
-    void (async () => {
+    const weak = weakRecitationSteps(state.recitationScores, topicId);
+    if (weak.length > 0) {
+      const last = lastRecitation(state.recitationScores, topicId) ?? [];
+      setOffer({ weak, last });
+      setLastBefore(last);
+      setQuestion("");
+      return;
+    }
+    void startFull();
+    // startFull reads fresh state itself; this should run only when the topic changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topicId]);
+
+  function stepPrompt(n: number) {
+    return n === 5 && scenario ? `Apply the rule to this scenario: ${scenario}` : `Step ${n}: ${RECITATION_STEPS[n - 1]}`;
+  }
+
+  function startFocus() {
+    if (!offer) return;
+    const first = offer.weak[0];
+    setFocus(offer.weak);
+    setFocusScores({});
+    setOffer(null);
+    setStep(first);
+    setAttemptCount(0);
+    setAnswer("");
+    setFeedback(
+      `Practising your weak ${offer.weak.length === 1 ? "step" : "steps"}: ${offer.weak
+        .map((n) => RECITATION_STEPS[n - 1])
+        .join(", ")}.`,
+    );
+    setQuestion(stepPrompt(first));
+  }
+
+  async function startFull() {
+    setOffer(null);
+    setFocus(null);
+    const state = loadState();
+    if (!state.userGroup) return;
+    {
       const result = await callTutor({
         feature: "recitation-drill",
         topicId,
@@ -104,8 +150,8 @@ function RecitationInner() {
       } else {
         setFeedback(result.message);
       }
-    })();
-  }, [topicId]);
+    }
+  }
 
   function persist(drill: DrillProgress) {
     saveActiveDrill(drill);
@@ -157,6 +203,27 @@ function RecitationInner() {
     nextScores[step - 1] = stepScore;
 
     const moveOn = Boolean(data.moveOn) || stepScore >= 2 || attemptCount + 1 >= 2;
+
+    if (moveOn && focus && offer === null) {
+      const practised = { ...focusScores, [step]: stepScore };
+      const rest = focus.filter((n) => n !== step);
+      if (rest.length === 0) {
+        const merged = mergeStepScores(lastBefore, practised);
+        setDone(true);
+        setScores(merged);
+        addRecitationScore(topicId, merged);
+        clearActiveDrill();
+        setQuestion("Weak steps practised. Your updated Practice score is below.");
+        return;
+      }
+      setFocus(rest);
+      setFocusScores(practised);
+      setStep(rest[0]);
+      setAttemptCount(0);
+      setAnswer("");
+      setQuestion(stepPrompt(rest[0]));
+      return;
+    }
 
     if (moveOn) {
       if (step >= 5) {
@@ -217,11 +284,39 @@ function RecitationInner() {
         <p className="text-sm text-muted">Recitation drill</p>
         <h1 className="font-display text-2xl sm:text-3xl">{title}</h1>
         {isDemo && <DemoBanner />}
-        <p className="mt-1 text-sm text-muted">
-          Step {Math.min(step, 5)} of 5 — {RECITATION_STEPS[Math.min(step, 5) - 1]}
-        </p>
+        {!offer && (
+          <p className="mt-1 text-sm text-muted">
+            {focus ? "Weak-step practice · " : ""}Step {Math.min(step, 5)} of 5 — {RECITATION_STEPS[Math.min(step, 5) - 1]}
+          </p>
+        )}
       </div>
 
+      {offer && (
+        <div className="space-y-3 rounded-lg border border-sky-300 bg-sky-50 p-4" role="status">
+          <p className="font-medium">🔁 Last time on this topic</p>
+          <ul className="space-y-1 text-sm">
+            {RECITATION_STEPS.map((name, i) => (
+              <li key={name} className={offer.weak.includes(i + 1) ? "font-semibold text-red-800" : "text-muted"}>
+                {offer.weak.includes(i + 1) ? "✗" : "✓"} {name}: {offer.last[i] ?? 0}/2
+              </li>
+            ))}
+          </ul>
+          <p className="text-sm">
+            Practise just the {offer.weak.length === 1 ? "step" : `${offer.weak.length} steps`} you were weak on, or do the
+            whole recitation again.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <button type="button" onClick={startFocus} className="rounded-md bg-accent px-4 py-2 text-white">
+              Practise my weak {offer.weak.length === 1 ? "step" : "steps"}
+            </button>
+            <button type="button" onClick={() => void startFull()} className="rounded-md border border-line px-4 py-2">
+              Full recitation
+            </button>
+          </div>
+        </div>
+      )}
+
+      {!offer && (
       <div className="rounded-lg border border-line bg-white/80 p-4">
         <p className="font-medium">Tutor</p>
         <p className="mt-2 leading-relaxed">{question}</p>
@@ -231,8 +326,9 @@ function RecitationInner() {
           </p>
         )}
       </div>
+      )}
 
-      {!done && (
+      {!done && !offer && (
         <>
           <AnswerBox
             value={answer}

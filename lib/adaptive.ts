@@ -97,3 +97,90 @@ export function shuffled<T>(list: T[], seed: number): T[] {
   if (out.length > 1 && out.every((x, i) => x === list[i])) out.push(out.shift()!); // never the same order
   return out;
 }
+
+// ------------------------------------------------------------------ Year 3–4 and bar: no repeats
+
+/** A problem scored below this comes back once, after CONFIRM_AFTER_DAYS, to confirm it was learned. */
+export const CONFIRM_BELOW_POINTS = 4;
+export const CONFIRM_AFTER_DAYS = 3;
+
+export type PickReason = "new" | "confirm" | "oldest";
+
+/** Latest bar-problem result per topic (diagnostic runs are left out). */
+export function problemHistory(
+  scores: { topicId: string; points?: number; finishedAt: string; isDiagnostic?: boolean }[],
+): Map<string, { lastAt: string; lastPoints: number | null; times: number }> {
+  const out = new Map<string, { lastAt: string; lastPoints: number | null; times: number }>();
+  for (const s of scores) {
+    if (s.isDiagnostic) continue;
+    const prev = out.get(s.topicId);
+    const times = (prev?.times ?? 0) + 1;
+    if (!prev || s.finishedAt >= prev.lastAt) out.set(s.topicId, { lastAt: s.finishedAt, lastPoints: s.points ?? null, times });
+    else out.set(s.topicId, { ...prev, times });
+  }
+  return out;
+}
+
+/**
+ * Next topic for Year 3–4 and bar reviewees, without needless repeats:
+ * 1. a topic the student has never done (at random);
+ * 2. else one scored below 4/5 at least 3 days ago, to confirm it (oldest first);
+ * 3. else the one done longest ago.
+ * Never the topic on screen now, when there is a choice.
+ */
+export function pickNextProblemTopic<T extends { topicId: string }>(
+  topics: T[],
+  scores: { topicId: string; points?: number; finishedAt: string; isDiagnostic?: boolean }[],
+  currentId: string | null,
+  now = new Date(),
+  random: () => number = Math.random,
+): { topic: T; reason: PickReason } | null {
+  if (topics.length === 0) return null;
+  const pool = topics.length > 1 ? topics.filter((t) => t.topicId !== currentId) : topics;
+  const hist = problemHistory(scores);
+  const fresh = pool.filter((t) => !hist.has(t.topicId));
+  if (fresh.length > 0) return { topic: fresh[Math.floor(random() * fresh.length)] ?? fresh[0], reason: "new" };
+  const cutoff = new Date(now.getTime() - CONFIRM_AFTER_DAYS * 86400000).toISOString();
+  const byOldest = [...pool].sort((a, b) => hist.get(a.topicId)!.lastAt.localeCompare(hist.get(b.topicId)!.lastAt));
+  const confirm = byOldest.find((t) => {
+    const h = hist.get(t.topicId)!;
+    return h.lastPoints !== null && h.lastPoints < CONFIRM_BELOW_POINTS && h.lastAt <= cutoff;
+  });
+  if (confirm) return { topic: confirm, reason: "confirm" };
+  return { topic: byOldest[0], reason: "oldest" };
+}
+
+/** How many of these topics the student has not done yet. */
+export function unseenCount(topics: { topicId: string }[], scores: { topicId: string; isDiagnostic?: boolean; finishedAt: string }[]): number {
+  const hist = problemHistory(scores);
+  return topics.filter((t) => !hist.has(t.topicId)).length;
+}
+
+// ------------------------------------------------------------------ recitation: re-drill weak steps
+
+/** Each recitation step is scored 0–2; a step below this is "weak" and offered again. */
+export const RECITATION_STEP_FULL = 2;
+
+/** Latest recitation step scores for a topic (5 steps), or null if never done. */
+export function lastRecitation(
+  records: { topicId: string; stepScores: number[]; finishedAt: string }[],
+  topicId: string,
+): number[] | null {
+  const mine = records.filter((r) => r.topicId === topicId).sort((a, b) => a.finishedAt.localeCompare(b.finishedAt));
+  return mine.length ? mine[mine.length - 1].stepScores : null;
+}
+
+/** 1-based steps scored below full marks last time (empty when none, or never done). */
+export function weakRecitationSteps(
+  records: { topicId: string; stepScores: number[]; finishedAt: string }[],
+  topicId: string,
+): number[] {
+  const last = lastRecitation(records, topicId);
+  if (!last) return [];
+  return [1, 2, 3, 4, 5].filter((step) => (last[step - 1] ?? 0) < RECITATION_STEP_FULL);
+}
+
+/** After practising only some steps: the new scores replace those steps; the rest stay as before. */
+export function mergeStepScores(previous: number[], practised: Record<number, number>): number[] {
+  return [1, 2, 3, 4, 5].map((step) => (step in practised ? practised[step] : previous[step - 1] ?? 0));
+}

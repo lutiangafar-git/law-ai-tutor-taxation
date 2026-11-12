@@ -27,12 +27,20 @@ import {
 import type { Feature, UserGroup } from "@/lib/types";
 import { SUBJECT } from "@/lib/subject";
 import { SYLLABUS_LABEL } from "@/lib/barExam";
-import { dueReviews, masteryPercent } from "@/lib/adaptive";
+import {
+  dueReviews,
+  masteryPercent,
+  pickNextProblemTopic,
+  problemHistory,
+  unseenCount,
+  weakRecitationSteps,
+  type PickReason,
+} from "@/lib/adaptive";
+import { RECITATION_STEPS } from "@/lib/prompts/recitation";
 import {
   finishedTopicIds,
   isSequentialGroup,
   nextInSyllabus,
-  pickRandomTopic,
   diagnosticRequired,
   remainingDiagnostic,
   topicSteps,
@@ -66,6 +74,8 @@ function HomeInner({ category }: { category: Category }) {
   const [paused, setPaused] = useState(false);
   const [topics, setTopics] = useState<TopicSummary[]>([]);
   const [selectedTopic, setSelectedTopic] = useState("");
+  /** Year 3–4 and bar: why this topic was picked (new, confirm, oldest). */
+  const [pickReason, setPickReason] = useState<PickReason | null>(null);
   const [resumeHref, setResumeHref] = useState<string | null>(null);
   const [showDiagnostic, setShowDiagnostic] = useState(false);
   const [diagnosticTopics, setDiagnosticTopics] = useState<TopicSummary[]>([]);
@@ -115,11 +125,18 @@ function HomeInner({ category }: { category: Category }) {
           setDiagnosticLeft(remainingDiagnostic(state.diagnosticTopicIds, state.problemScores));
         }
         setFinished(done);
-        // Year 1–2: next unfinished topic in syllabus order. Others: a random topic.
-        const start = isSequentialGroup(state.userGroup)
-          ? (nextInSyllabus(list, done) ?? list[0])
-          : pickRandomTopic(list, null);
-        if (start) setSelectedTopic(start.topicId);
+        // Year 1–2: next unfinished topic in syllabus order.
+        // Others: a topic not done yet first (no needless repeats), see lib/adaptive.ts.
+        if (isSequentialGroup(state.userGroup)) {
+          const start = nextInSyllabus(list, done) ?? list[0];
+          if (start) setSelectedTopic(start.topicId);
+        } else {
+          const pick = pickNextProblemTopic(list, state.problemScores, null);
+          if (pick) {
+            setSelectedTopic(pick.topic.topicId);
+            setPickReason(pick.reason);
+          }
+        }
 
         const isRepeater = state.userGroup === "bar-repeater";
         const isFirstTime = state.userGroup === "bar-first-time";
@@ -145,9 +162,24 @@ function HomeInner({ category }: { category: Category }) {
   const finishedCount = topics.filter((t) => finished.has(t.topicId)).length;
 
   function randomTopic() {
-    const pick = pickRandomTopic(topics, selectedTopic);
-    if (pick) setSelectedTopic(pick.topicId);
+    const pick = pickNextProblemTopic(topics, progress?.problemScores ?? [], selectedTopic);
+    if (pick) {
+      setSelectedTopic(pick.topic.topicId);
+      setPickReason(pick.reason);
+    }
   }
+
+  const history = problemHistory(progress?.problemScores ?? []);
+  const unseen = unseenCount(topics, progress?.problemScores ?? []);
+  const pickedHistory = history.get(selectedTopic);
+  const pickNote =
+    pickReason === "new"
+      ? "🆕 New to you."
+      : pickReason === "confirm"
+        ? `🔁 Back to confirm: your last score here was ${pickedHistory?.lastPoints ?? "?"}/5.`
+        : pickReason === "oldest"
+          ? "You have done every topic. This is the one you did longest ago."
+          : "";
 
   const subjects = useMemo(() => {
     return Array.from(new Set(topics.map((t) => t.subject)));
@@ -290,21 +322,26 @@ function HomeInner({ category }: { category: Category }) {
                 ) : (
                   <div className="flex flex-wrap items-center gap-3">
                     <p className="text-sm text-muted">
-                      Topics are picked at random to test your general knowledge.
+                      {unseen} of {topics.length} topics are new to you. New ones come first; a problem you scored
+                      below 4/5 comes back after 3 days to confirm.
                     </p>
                     <button
                       type="button"
                       onClick={randomTopic}
                       className="rounded-md border border-accent px-3 py-2 text-sm font-medium text-accent"
                     >
-                      Random topic
+                      Next topic
                     </button>
+                    {pickNote && <p className="w-full text-sm" role="status">{pickNote}</p>}
                   </div>
                 )}
                 <select
                   className="w-full rounded-md border border-line bg-white px-3 py-3"
                   value={selectedTopic}
-                  onChange={(e) => setSelectedTopic(e.target.value)}
+                  onChange={(e) => {
+                    setSelectedTopic(e.target.value);
+                    setPickReason(null);
+                  }}
                 >
                   {subjects.map((subject) => (
                     <optgroup key={subject} label={subject}>
@@ -316,6 +353,14 @@ function HomeInner({ category }: { category: Category }) {
                             {topic.title}
                             {topic.isDemo ? " (demo)" : ""}
                             {sequential && progress ? masteryLabel(progress.quizResults, topic.topicId) : ""}
+                            {progress && weakRecitationSteps(progress.recitationScores, topic.topicId).length > 0
+                              ? ` · weak step: ${weakRecitationSteps(progress.recitationScores, topic.topicId)
+                                  .map((n) => RECITATION_STEPS[n - 1])
+                                  .join(", ")}`
+                              : ""}
+                            {!sequential && history.has(topic.topicId)
+                              ? ` · done, last score ${history.get(topic.topicId)?.lastPoints ?? "?"}/5`
+                              : ""}
                           </option>
                         ))}
                     </optgroup>

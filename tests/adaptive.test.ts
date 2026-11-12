@@ -78,3 +78,56 @@ describe("mastery and shuffling", () => {
     expect([...a].sort()).toEqual(list);
   });
 });
+
+import { pickNextProblemTopic, unseenCount, problemHistory } from "@/lib/adaptive";
+
+describe("Year 3–4 and bar: no repeats", () => {
+  const topics = [{ topicId: "a" }, { topicId: "b" }, { topicId: "c" }];
+  const done = (topicId: string, points: number, day: number) => ({
+    topicId,
+    points,
+    finishedAt: new Date(T0.getTime() + day * 86400000).toISOString(),
+  });
+  it("serves a topic the student has never done", () => {
+    const r = pickNextProblemTopic(topics, [done("a", 5, 0), done("b", 5, 0)], null, days(1), () => 0);
+    expect(r).toEqual({ topic: { topicId: "c" }, reason: "new" });
+  });
+  it("once all are done, brings back a low score after 3 days to confirm", () => {
+    const scores = [done("a", 5, 0), done("b", 2, 0), done("c", 5, 1)];
+    expect(pickNextProblemTopic(topics, scores, null, days(2))?.reason).toBe("oldest");
+    expect(pickNextProblemTopic(topics, scores, null, days(3))).toEqual({ topic: { topicId: "b" }, reason: "confirm" });
+  });
+  it("otherwise the one done longest ago, never the one on screen", () => {
+    const scores = [done("a", 5, 0), done("b", 5, 1), done("c", 5, 2)];
+    expect(pickNextProblemTopic(topics, scores, null, days(9))?.topic.topicId).toBe("a");
+    expect(pickNextProblemTopic(topics, scores, "a", days(9))?.topic.topicId).toBe("b");
+  });
+  it("a later good score clears the confirm", () => {
+    const scores = [done("a", 5, 0), done("b", 2, 0), done("c", 5, 0), done("b", 5, 4)];
+    expect(pickNextProblemTopic(topics, scores, null, days(9))?.reason).toBe("oldest");
+    expect(problemHistory(scores).get("b")?.times).toBe(2);
+  });
+  it("counts topics not done yet, ignoring diagnostic runs", () => {
+    expect(unseenCount(topics, [done("a", 5, 0), { ...done("b", 3, 0), isDiagnostic: true }])).toBe(2);
+  });
+});
+
+import { mergeStepScores, weakRecitationSteps } from "@/lib/adaptive";
+
+describe("recitation: re-drill weak steps", () => {
+  const rec = (stepScores: number[], day: number) => ({
+    topicId: "t",
+    stepScores,
+    finishedAt: new Date(T0.getTime() + day * 86400000).toISOString(),
+  });
+  it("finds the steps below full marks in the latest recitation", () => {
+    expect(weakRecitationSteps([rec([2, 0, 0, 0, 0], 0), rec([2, 1, 2, 0, 2], 1)], "t")).toEqual([2, 4]);
+  });
+  it("nothing to re-drill when every step was full, or never done", () => {
+    expect(weakRecitationSteps([rec([2, 2, 2, 2, 2], 0)], "t")).toEqual([]);
+    expect(weakRecitationSteps([], "t")).toEqual([]);
+  });
+  it("practised steps replace the old scores; the rest stay", () => {
+    expect(mergeStepScores([2, 1, 2, 0, 2], { 2: 2, 4: 1 })).toEqual([2, 2, 2, 1, 2]);
+  });
+});
