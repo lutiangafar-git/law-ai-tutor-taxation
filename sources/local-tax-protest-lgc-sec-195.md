@@ -37,7 +37,10 @@ Model answer: No. Under Sec. 195, a written protest must be filed within 60 days
 # Problem drill: exam or bar-style problem
 Problem: (Original bar-style problem. Related issues were asked in the 2010 and 2014 Bar Examinations, Taxation Law.) Tindahan Inc. received a notice of local business tax assessment from the city treasurer and filed a written protest 20 days later. The treasurer never acted on the protest. Tindahan waited, hoping for a decision, and filed an appeal in court 120 days after it had filed the protest. The city argues that the appeal is too late. Is the city correct? Explain.
 Model answer:
-- Answer: Yes. Tindahan's appeal was filed too late, and the assessment has become conclusive and unappealable.
-- Legal basis: Under Sec. 195 of the Local Government Code, the local treasurer must decide a protest within 60 days from its filing. The taxpayer has 30 days from receipt of the denial or from the lapse of that 60-day period within which to appeal to the court of competent jurisdiction; otherwise, the assessment becomes conclusive and unappealable.
-- Application: Tindahan's protest, filed 20 days after receipt, was on time. But the treasurer did not decide it, so the treasurer's 60-day period lapsed 60 days after the protest was filed. From then, Tindahan had 30 days to appeal, that is, until 90 days after filing the protest. Its appeal came 120 days after the protest, 30 days too late. Waiting for a decision does not stop the 30-day period, which runs from the lapse of the 60 days.
-- Conclusion: Because the appeal was filed beyond the 30 days counted from the lapse of the treasurer's 60-day period, the assessment became conclusive and unappealable, and the city is correct.
+(Answer) Yes. Tindahan's appeal was filed too late, and the assessment has become conclusive and unappealable.
+
+(Legal basis) Under Sec. 195 of the Local Government Code, the local treasurer must decide a protest within 60 days from its filing. The taxpayer has 30 days from receipt of the denial or from the lapse of that 60-day period within which to appeal to the court of competent jurisdiction; otherwise, the assessment becomes conclusive and unappealable.
+
+(Application) Tindahan's protest, filed 20 days after receipt, was on time. But the treasurer did not decide it, so the treasurer's 60-day period lapsed 60 days after the protest was filed. From then, Tindahan had 30 days to appeal, that is, until 90 days after filing the protest. Its appeal came 120 days after the protest, 30 days too late. Waiting for a decision does not stop the 30-day period, which runs from the lapse of the 60 days.
+
+(Conclusion) Because the appeal was filed beyond the 30 days counted from the lapse of the treasurer's 60-day period, the assessment became conclusive and unappealable, and the city is correct.

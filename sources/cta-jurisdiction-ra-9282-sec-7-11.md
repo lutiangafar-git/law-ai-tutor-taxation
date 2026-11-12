@@ -39,7 +39,10 @@ Model answer: No. Under Sec. 7(a)(1) of RA 9282, the CTA has exclusive appellate
 # Problem drill: exam or bar-style problem
 Problem: (Original bar-style problem. Related issues were asked in the 2014 and 2016 Bar Examinations, Taxation Law.) Ani Trading paid local business tax under protest and then sued the city in the Regional Trial Court for a refund. The RTC, in its original jurisdiction, ruled against Ani Trading. Ani Trading's lawyer filed an appeal with the Court of Appeals within 15 days. The city moved to dismiss the appeal for lack of jurisdiction. Should the appeal be dismissed? Explain.
 Model answer:
-- Answer: Yes. The Court of Appeals has no jurisdiction over the appeal; it belongs to the Court of Tax Appeals.
-- Legal basis: Under Sec. 7(a)(3) of RA 9282, the CTA has exclusive appellate jurisdiction to review by appeal the decisions, orders or resolutions of Regional Trial Courts in local tax cases originally decided or resolved by them in the exercise of their original or appellate jurisdiction. Under Sec. 11, the adversely affected party may appeal to the CTA within thirty (30) days after receipt of the decision.
-- Application: Ani Trading's suit for a refund of local business tax is a local tax case, and the RTC decided it in its original jurisdiction. Its decision is therefore reviewable only by the CTA, whose appellate jurisdiction is exclusive. Filing on time with the Court of Appeals does not cure the error, because that court has no jurisdiction over the case.
-- Conclusion: The appeal to the Court of Appeals should be dismissed; Ani Trading should have appealed to the CTA within 30 days from receipt of the RTC decision.
+(Answer) Yes. The Court of Appeals has no jurisdiction over the appeal; it belongs to the Court of Tax Appeals.
+
+(Legal basis) Under Sec. 7(a)(3) of RA 9282, the CTA has exclusive appellate jurisdiction to review by appeal the decisions, orders or resolutions of Regional Trial Courts in local tax cases originally decided or resolved by them in the exercise of their original or appellate jurisdiction. Under Sec. 11, the adversely affected party may appeal to the CTA within thirty (30) days after receipt of the decision.
+
+(Application) Ani Trading's suit for a refund of local business tax is a local tax case, and the RTC decided it in its original jurisdiction. Its decision is therefore reviewable only by the CTA, whose appellate jurisdiction is exclusive. Filing on time with the Court of Appeals does not cure the error, because that court has no jurisdiction over the case.
+
+(Conclusion) The appeal to the Court of Appeals should be dismissed; Ani Trading should have appealed to the CTA within 30 days from receipt of the RTC decision.

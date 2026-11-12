@@ -32,14 +32,18 @@ Scenario: [Reviewer writes a 2–3 sentence scenario here.]
 Model answer: [Reviewer writes the expected answer here.]
 
 # Problem drill: exam or bar-style problem
-<!-- A problem plus a model answer split into the four ALAC parts the tutor scores. -->
+<!-- A problem plus a model answer in four plain paragraphs, like a Bar answer in Examplify:
+     start each paragraph with its ALAC label in parentheses. No bullets, no indents. -->
 Problem: (Original bar-style problem. A similar issue was asked in the [year] Bar Examination.) [Write an ORIGINAL problem.
 Never copy a reviewer's suggested answer; write the model answer fresh.]
 Model answer:
-- Answer: [Direct conclusion]
-- Legal basis: [Provision or doctrine, with citation]
-- Application: [How the facts meet the law]
-- Conclusion: [Final conclusion]
+(Answer) [Direct conclusion]
+
+(Legal basis) [Provision or doctrine, with citation]
+
+(Application) [How the facts meet the law]
+
+(Conclusion) [Final conclusion]
 
 # Objective and multiple-choice quiz (Year 1-2)
 <!-- REQUIRED for topics tagged year-1 or year-2 (at least 2 multiple choice + 2 objective). Leave out for Year 3+ only topics.

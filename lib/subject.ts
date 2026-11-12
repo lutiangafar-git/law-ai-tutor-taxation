@@ -53,7 +53,7 @@ export const SUBJECT: SubjectConfig = {
       "Court of Tax Appeals",
     ],
   },
-  demoSourceNote: "the National Internal Revenue Code, the Local Government Code, the CTA law and the Constitution",
+  demoSourceNote: "the National Internal Revenue Code, the Local Government Code, the CTA law, the Constitution and Supreme Court decisions",
 };
 
 /** Areas a student in this year sees. Year 4 sees every area. */

@@ -37,7 +37,10 @@ Model answer: No. Under Sec. 105, "in the course of trade or business" covers th
 # Problem drill: exam or bar-style problem
 Problem: (Original bar-style problem. Related issues were asked in the 2014 and 2019 Bar Examinations, Taxation Law.) Ramon, a bank employee, bought a car for his family's personal use. After four years, he sold it to his officemate for P600,000. He has never sold any other car and is not engaged in any business. The BIR assessed Ramon for VAT on the sale. Is the sale subject to VAT? Explain.
 Model answer:
-- Answer: No. Ramon's sale of his family car is not subject to VAT.
-- Legal basis: Under Sec. 105 of the NIRC, VAT is imposed on a person who sells goods or properties "in the course of trade or business", which means the regular conduct or pursuit of a commercial or an economic activity, including transactions incidental to it.
-- Application: Ramon is an employee, not engaged in any business. He bought the car for his family's personal use and sold it once, after four years. This is an isolated, casual sale, not part of any regular commercial or economic activity, nor incidental to one. It is therefore not made in the course of trade or business.
-- Conclusion: Because the sale was not in the course of trade or business, it falls outside Sec. 105, and the VAT assessment is wrong.
+(Answer) No. Ramon's sale of his family car is not subject to VAT.
+
+(Legal basis) Under Sec. 105 of the NIRC, VAT is imposed on a person who sells goods or properties "in the course of trade or business", which means the regular conduct or pursuit of a commercial or an economic activity, including transactions incidental to it.
+
+(Application) Ramon is an employee, not engaged in any business. He bought the car for his family's personal use and sold it once, after four years. This is an isolated, casual sale, not part of any regular commercial or economic activity, nor incidental to one. It is therefore not made in the course of trade or business.
+
+(Conclusion) Because the sale was not in the course of trade or business, it falls outside Sec. 105, and the VAT assessment is wrong.

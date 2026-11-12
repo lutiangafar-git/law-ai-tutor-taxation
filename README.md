@@ -95,6 +95,9 @@ npm run dev                     # open http://localhost:3000
 | Variable | Where it lives | Used by |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | `.env.local` on your computer (git-ignored) and Vercel → Settings → Environment Variables | `app/api/tutor/route.ts` only, on the server |
+| `REVIEWER_CODE` | Same places. At least 8 characters; leave unset to switch the reviewer page off | `/review` and `app/api/review/*`, on the server |
+| `GITHUB_TOKEN` | Vercel only. A fine-grained GitHub token for this one repository with *Contents: read and write* | `app/api/review/publish` (Approve and publish) |
+| `GITHUB_REPO` | Vercel only, e.g. `lutiangafar-git/law-ai-tutor-civil` | same |
 
 There are no secrets in the code or the Git history. `.env*.local` is git-ignored, `.env.example` is an empty
 template, and CI runs a **Gitleaks** scan over the full history on every push. The key is never sent to the browser.
@@ -129,6 +132,26 @@ docs/           validation, PRD, architecture, reflection, demo script
 Copy `sources/_TEMPLATE.md`, fill in every section, and set `yearLevels` to match the year plan in `lib/subject.ts` (e.g. `[year-3, year-4, bar]`).
 While it is unreviewed, add `status: demo`. A law-trained reviewer then fills `reviewedBy` and `lastReviewed`
 and deletes `status: demo`. A file with neither is hidden. `npm test` checks that every topic file is complete.
+
+### Drafting a topic from a new Supreme Court decision (`/review`)
+For lawyer reviewers only, behind the `REVIEWER_CODE` passcode (the page is not linked anywhere and is hidden from search engines).
+1. Give the decision: a LawPhil (`lawphil.net`) or SC E-Library (`elibrary.judiciary.gov.ph`) link, an uploaded
+   PDF / HTML / text file, or pasted text. Only those two sites are ever fetched.
+2. Optionally type the case title, G.R. number and date; anything left blank is read from the decision. The app
+   says whether the decision is within the Bar cut-off in `lib/barExam.ts` (later ones are kept for the next Bar).
+3. Claude drafts one topic from the main opinion only, in the template's format, with new facts. The page shows
+   "Your draft is ready" (and the browser tab title changes) when it is done, in about a minute.
+4. Code checks the draft: every quoted line must be word for word in the decision (or the Code text in
+   *Source text*); every case must carry its **title, G.R. number and date**; the subject, year levels, syllabus
+   year and quiz are complete; and the problem does not copy the decision's facts.
+5. The reviewer edits the draft on the page and re-checks it. Then they type their name, tick that they checked
+   the law, and click **Approve and publish**: the app writes `reviewedBy` and today's date (Philippine time),
+   removes `status: draft`, and saves the file to `sources/` on GitHub through `GITHUB_TOKEN`. Vercel redeploys,
+   so the topic is live for students in about two minutes. It never overwrites an existing topic. Without the
+   GitHub settings, the reviewer can download the approved file instead.
+
+Model answers are written like a Bar answer in Examplify: four plain paragraphs starting
+`(Answer)`, `(Legal basis)`, `(Application)` and `(Conclusion)`.
 
 ## Known limitations (v1)
 - Content is seven demo topics in Taxation Law; lawyer sign-off is pending.

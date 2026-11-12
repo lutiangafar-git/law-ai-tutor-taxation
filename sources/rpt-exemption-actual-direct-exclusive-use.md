@@ -39,7 +39,10 @@ Model answer: No. Under Sec. 234(a), real property owned by a political subdivis
 # Problem drill: exam or bar-style problem
 Problem: (Original bar-style problem. Related issues were asked in the 2010, 2016 and 2017 Bar Examinations, Taxation Law.) San Isidro Parish owns a two-storey building beside its church. The ground floor is leased to a pharmacy and a fast-food outlet. The second floor is used as the parish office and for free catechism classes. The city assessor assessed real property tax on the entire building. The parish argues that the whole building is exempt because a church owns it. Who is correct? Explain.
 Model answer:
-- Answer: Neither is fully correct. The second floor is exempt, but the leased ground floor is subject to real property tax.
-- Legal basis: Under Sec. 234(b) of the Local Government Code and Art. VI, Sec. 28(3) of the Constitution, lands, buildings and improvements actually, directly and exclusively used for religious, charitable or educational purposes are exempt from real property tax. The exemption depends on the actual use of the property, not on who owns it.
-- Application: The second floor is used as the parish office and for free catechism classes, a use that is actually, directly and exclusively religious, so it is exempt. The ground floor, though owned by the parish, is leased to a pharmacy and a fast-food outlet for commercial purposes; it is not used exclusively for religious purposes. Church ownership alone does not make the leased portion exempt.
-- Conclusion: The city may collect real property tax only on the leased ground floor; the assessment on the second floor should be cancelled.
+(Answer) Neither is fully correct. The second floor is exempt, but the leased ground floor is subject to real property tax.
+
+(Legal basis) Under Sec. 234(b) of the Local Government Code and Art. VI, Sec. 28(3) of the Constitution, lands, buildings and improvements actually, directly and exclusively used for religious, charitable or educational purposes are exempt from real property tax. The exemption depends on the actual use of the property, not on who owns it.
+
+(Application) The second floor is used as the parish office and for free catechism classes, a use that is actually, directly and exclusively religious, so it is exempt. The ground floor, though owned by the parish, is leased to a pharmacy and a fast-food outlet for commercial purposes; it is not used exclusively for religious purposes. Church ownership alone does not make the leased portion exempt.
+
+(Conclusion) The city may collect real property tax only on the leased ground floor; the assessment on the second floor should be cancelled.

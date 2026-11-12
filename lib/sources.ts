@@ -55,9 +55,12 @@ function fieldAfterLabel(section: string, label: string): string {
 }
 
 function parseModelAnswerBlock(section: string): SourceTopic["modelAnswer"] {
+  // Bar-exam paragraph form: "(Answer) ...", "(Legal basis) ...", one paragraph each.
+  // The older "- Answer: ..." bullet form is still read.
   const pick = (label: string) => {
+    const next = "(?=\\n\\s*(?:-\\s*(?:Answer|Legal basis|Application|Conclusion):|\\((?:Answer|Legal basis|Application|Conclusion)\\))|$)";
     const re = new RegExp(
-      `-\\s*${label}:\\s*([\\s\\S]*?)(?=\\n-\\s*(?:Answer|Legal basis|Application|Conclusion):|$)`,
+      `(?:^|\\n)\\s*(?:-\\s*${label}:|\\(${label}\\))\\s*([\\s\\S]*?)${next}`,
       "i",
     );
     return section.match(re)?.[1]?.trim() ?? "";
@@ -86,11 +89,23 @@ function isDemo(data: Record<string, unknown>): boolean {
 
 function parseTopicFile(filePath: string): SourceTopic | null {
   const raw = fs.readFileSync(filePath, "utf8");
+  return parseTopicMarkdown(raw, path.basename(filePath, ".md"));
+}
+
+/**
+ * Parses topic Markdown. Unreviewed, non-demo topics return null unless
+ * `includeDrafts` is set (used only by the reviewer's draft checker).
+ */
+export function parseTopicMarkdown(
+  raw: string,
+  fallbackId: string,
+  opts: { includeDrafts?: boolean } = {},
+): SourceTopic | null {
   const { data, content } = matter(raw);
 
   const reviewed = isReviewed(data);
   const demo = !reviewed && isDemo(data);
-  if (!reviewed && !demo) return null;
+  if (!reviewed && !demo && !opts.includeDrafts) return null;
 
   const yearLevels = asStringArray(data.yearLevels) as YearLevelTag[];
   const keyPointsSection =
@@ -106,7 +121,7 @@ function parseTopicFile(filePath: string): SourceTopic | null {
   );
 
   return {
-    topicId: String(data.topicId ?? path.basename(filePath, ".md")),
+    topicId: String(data.topicId ?? fallbackId),
     title: String(data.title ?? ""),
     subject: String(data.subject ?? ""),
     yearLevels,

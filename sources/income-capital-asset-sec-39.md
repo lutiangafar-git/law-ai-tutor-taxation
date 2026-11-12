@@ -36,7 +36,10 @@ Model answer: No. Under Sec. 39(A)(1), property held primarily for sale to custo
 # Problem drill: exam or bar-style problem
 Problem: (Original bar-style problem. Related issues were asked in the 2015 and 2019 Bar Examinations, Taxation Law.) Dr. Dana Cruz, a practising dentist, inherited a vacant lot in Batangas from her father. She never built on it, never used it in her dental practice, and has never bought or sold any other real property. She sold the lot this year. The BIR examiner treated the lot as an ordinary asset, reasoning that Dr. Cruz is engaged in business through her dental practice. Is the lot a capital asset or an ordinary asset? Explain.
 Model answer:
-- Answer: The lot is a capital asset of Dr. Cruz.
-- Legal basis: Under Sec. 39(A)(1) of the NIRC, capital assets are property held by the taxpayer, whether or not connected with trade or business, except stock in trade or inventory, property held primarily for sale to customers in the ordinary course of trade or business, depreciable property used in trade or business, and real property used in trade or business.
-- Application: Dr. Cruz is in the business of dentistry, not real estate; she has never bought or sold other real property, so the lot is not stock in trade or held for sale to customers. It was never used in her dental practice, so it is not real property used in trade or business. That she has a business of some kind does not make every property she owns an ordinary asset; what matters is how this property was held and used.
-- Conclusion: Because the lot falls under none of the exclusions in Sec. 39(A)(1), it is a capital asset, and the examiner's treatment is wrong.
+(Answer) The lot is a capital asset of Dr. Cruz.
+
+(Legal basis) Under Sec. 39(A)(1) of the NIRC, capital assets are property held by the taxpayer, whether or not connected with trade or business, except stock in trade or inventory, property held primarily for sale to customers in the ordinary course of trade or business, depreciable property used in trade or business, and real property used in trade or business.
+
+(Application) Dr. Cruz is in the business of dentistry, not real estate; she has never bought or sold other real property, so the lot is not stock in trade or held for sale to customers. It was never used in her dental practice, so it is not real property used in trade or business. That she has a business of some kind does not make every property she owns an ordinary asset; what matters is how this property was held and used.
+
+(Conclusion) Because the lot falls under none of the exclusions in Sec. 39(A)(1), it is a capital asset, and the examiner's treatment is wrong.

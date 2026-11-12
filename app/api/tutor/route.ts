@@ -162,12 +162,13 @@ function modelSlice(
 }
 
 function formatFullModel(topic: NonNullable<ReturnType<typeof getTopicById>>): string {
+  // Written like a Bar answer in Examplify: four plain paragraphs, ALAC label in parentheses.
   return [
-    `Answer: ${topic.modelAnswer.answer}`,
-    `Legal basis: ${topic.modelAnswer.legalBasis}`,
-    `Application: ${topic.modelAnswer.application}`,
-    `Conclusion: ${topic.modelAnswer.conclusion}`,
-  ].join("\n");
+    `(Answer) ${topic.modelAnswer.answer}`,
+    `(Legal basis) ${topic.modelAnswer.legalBasis}`,
+    `(Application) ${topic.modelAnswer.application}`,
+    `(Conclusion) ${topic.modelAnswer.conclusion}`,
+  ].join("\n\n");
 }
 
 export async function POST(request: Request) {
