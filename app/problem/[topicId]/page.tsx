@@ -7,6 +7,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { AnswerBox } from "@/components/AnswerBox";
 import { ClassPauseBanner } from "@/components/ClassPauseBanner";
 import { GroupGuard } from "@/components/GroupGuard";
+import { StepGuard } from "@/components/StepGuard";
 import { canUseFeature, isPausedForClass } from "@/lib/access";
 import {
   addProblemScore,
@@ -414,9 +415,11 @@ function ProblemInner() {
 export default function ProblemPage() {
   return (
     <GroupGuard>
-      <Suspense fallback={<p className="text-muted">Loading…</p>}>
-        <ProblemInner />
-      </Suspense>
+      <StepGuard step="problem-drill">
+        <Suspense fallback={<p className="text-muted">Loading…</p>}>
+          <ProblemInner />
+        </Suspense>
+      </StepGuard>
     </GroupGuard>
   );
 }

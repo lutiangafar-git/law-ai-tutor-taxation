@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { AnswerBox } from "@/components/AnswerBox";
 import { ClassPauseBanner } from "@/components/ClassPauseBanner";
 import { GroupGuard } from "@/components/GroupGuard";
+import { StepGuard } from "@/components/StepGuard";
 import { canUseFeature, isPausedForClass } from "@/lib/access";
 import { RECITATION_STEPS } from "@/lib/prompts/recitation";
 import {
@@ -269,7 +270,9 @@ function RecitationInner() {
 export default function RecitationPage() {
   return (
     <GroupGuard>
-      <RecitationInner />
+      <StepGuard step="recitation-drill">
+        <RecitationInner />
+      </StepGuard>
     </GroupGuard>
   );
 }
