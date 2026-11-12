@@ -1,3 +1,4 @@
+import { recordReview, scheduleMissed } from "./adaptive";
 import {
   createDefaultStudentClassSchedule,
   isStudentGroup,
@@ -28,6 +29,7 @@ export const DEFAULT_STATE: StoredUserState = {
   quizResults: [],
   recitationScores: [],
   rateLimit: { windowStart: 0, count: 0 },
+  quizReview: [],
 };
 
 function canUseBrowser(): boolean {
@@ -49,6 +51,7 @@ export function loadState(): StoredUserState {
       quizResults: parsed.quizResults ?? [],
       diagnosticTopicIds: parsed.diagnosticTopicIds ?? [],
       rateLimit: parsed.rateLimit ?? { windowStart: 0, count: 0 },
+      quizReview: Array.isArray(parsed.quizReview) ? parsed.quizReview : [],
     };
   } catch {
     return { ...DEFAULT_STATE };
@@ -121,6 +124,22 @@ export function clearActiveDrill(): StoredUserState {
 export function addQuizResult(record: StoredUserState["quizResults"][number]): StoredUserState {
   const state = loadState();
   return updateState({ quizResults: [...state.quizResults, record].slice(-200) });
+}
+
+/** Puts every question missed in a quiz on the 1-day review wait. */
+export function scheduleMissedQuestions(topicId: string, itemIndexes: number[], now = new Date()): StoredUserState {
+  return updateState((prev) => ({
+    ...prev,
+    quizReview: itemIndexes.reduce((q, i) => scheduleMissed(q, topicId, i, now), prev.quizReview).slice(-300),
+  }));
+}
+
+/** Records a spaced-review answer: right on the first try moves it on; wrong starts it over. */
+export function recordReviewAnswer(topicId: string, itemIndex: number, rightFirstTry: boolean, now = new Date()): StoredUserState {
+  return updateState((prev) => ({
+    ...prev,
+    quizReview: recordReview(prev.quizReview, topicId, itemIndex, rightFirstTry, now),
+  }));
 }
 
 export function addProblemScore(record: ProblemScoreRecord): StoredUserState {

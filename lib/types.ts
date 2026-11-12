@@ -175,4 +175,6 @@ export interface StoredUserState {
     finishedAt: string;
   }[];
   rateLimit: { windowStart: number; count: number };
+  /** Year 1–2 spaced review: missed quiz questions and when each is next due (lib/adaptive.ts). */
+  quizReview: import("./adaptive").ReviewItem[];
 }

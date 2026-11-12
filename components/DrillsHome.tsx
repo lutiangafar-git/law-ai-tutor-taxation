@@ -27,6 +27,7 @@ import {
 import type { Feature, UserGroup } from "@/lib/types";
 import { SUBJECT } from "@/lib/subject";
 import { SYLLABUS_LABEL } from "@/lib/barExam";
+import { dueReviews, masteryPercent } from "@/lib/adaptive";
 import {
   finishedTopicIds,
   isSequentialGroup,
@@ -51,6 +52,12 @@ const CATEGORY_TITLE: Record<Category, string> = {
   "year-3-4": "Year 3–4 drills",
   bar: "Bar review drills",
 };
+
+/** " · quiz mastery 75%" from the student's latest quiz on the topic, or "" if none yet. */
+function masteryLabel(results: { topicId: string; firstTry: number; total: number }[] | undefined, topicId: string): string {
+  const last = [...(results ?? [])].reverse().find((r) => r.topicId === topicId);
+  return last ? ` · quiz mastery ${masteryPercent(last.firstTry, last.total)}%` : "";
+}
 
 function HomeInner({ category }: { category: Category }) {
   const router = useRouter();
@@ -243,6 +250,20 @@ function HomeInner({ category }: { category: Category }) {
           <>
           <div className="space-y-3">
             <h2 className="font-display text-xl">Choose a topic</h2>
+            {sequential && progress && dueReviews(progress.quizReview ?? []).length > 0 && (
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-sky-300 bg-sky-50 p-3" role="status">
+                <p className="text-sm">
+                  🔁 <strong>
+                    {dueReviews(progress.quizReview ?? []).length}{" "}
+                    {dueReviews(progress.quizReview ?? []).length === 1 ? "question" : "questions"} to review today
+                  </strong>{" "}
+                  from quizzes you took before. A short review helps the law stick.
+                </p>
+                <Link href="/review-missed" className="rounded-md bg-accent px-4 py-2 text-sm text-white">
+                  Review now
+                </Link>
+              </div>
+            )}
             {topics.length === 0 ? (
               <p className="rounded-md border border-line bg-white/70 p-4 text-sm text-muted">
                 No topics are available for your year yet. Topics appear once a
@@ -294,6 +315,7 @@ function HomeInner({ category }: { category: Category }) {
                             {sequential && finished.has(topic.topicId) ? "✓ " : ""}
                             {topic.title}
                             {topic.isDemo ? " (demo)" : ""}
+                            {sequential && progress ? masteryLabel(progress.quizResults, topic.topicId) : ""}
                           </option>
                         ))}
                     </optgroup>
