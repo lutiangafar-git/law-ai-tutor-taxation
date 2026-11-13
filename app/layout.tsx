@@ -34,6 +34,9 @@ export default function RootLayout({
               {SUBJECT.appName}
             </Link>
             <nav className="flex gap-3 text-sm text-muted">
+              <Link className="hover:text-accent" href="/bank">
+                Question bank
+              </Link>
               <Link className="hover:text-accent" href="/drills">
                 Drills
               </Link>
